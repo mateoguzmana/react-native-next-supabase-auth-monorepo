@@ -1,10 +1,14 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import Auth from './components/Auth';
 
 export function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>React Native + Next.js Monorepo</Text>
+      <Auth
+        supabaseUrl=""
+        supabaseKey=""
+      />
     </SafeAreaView>
   );
 }
