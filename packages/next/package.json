@@ -1,0 +1,32 @@
+{
+  "name": "@react-native-next-monorepo/next",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@react-native-next-monorepo/app": "*",
+    "next": "12.2.3",
+    "next-fonts": "1.5.1",
+    "next-images": "1.8.4",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.69.3",
+    "react-native-web": "0.18.7"
+  },
+  "devDependencies": {
+    "@types/node": "18.6.3",
+    "@types/react": "18.0.15",
+    "@types/react-dom": "18.0.6",
+    "@types/react-native": "0.69.5",
+    "babel-plugin-react-native-web": "0.18.7",
+    "babel-plugin-transform-define": "2.0.1",
+    "eslint": "8.21.0",
+    "eslint-config-next": "12.2.3",
+    "typescript": "4.7.4"
+  }
+}

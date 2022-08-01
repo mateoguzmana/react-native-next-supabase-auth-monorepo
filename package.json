@@ -1,0 +1,25 @@
+{
+  "name": "react-native-next-monorepo",
+  "version": "0.0.1",
+  "private": true,
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ],
+    "nohoist": [
+      "**/react",
+      "**/react-dom",
+      "**/react-native",
+      "**/react-native/**",
+      "**/react-native-web"
+    ]
+  },
+  "scripts": {
+    "all": "yarn android & yarn ios & yarn web",
+    "android": "yarn workspace @react-native-next-monorepo/mobile android",
+    "ios": "yarn workspace @react-native-next-monorepo/mobile ios",
+    "web": "yarn workspace @react-native-next-monorepo/next dev",
+    "reset": "find . -type dir -name node_modules | xargs rm -rf && rm -rf yarn.lock",
+    "prettier": "prettier --write '**/*.{ts,js,css,html}'"
+  }
+}
