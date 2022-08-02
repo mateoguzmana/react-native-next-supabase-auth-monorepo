@@ -1,11 +1,30 @@
+// import 'react-native-url-polyfill/auto';
 import React from 'react';
-import { SafeAreaView, StyleSheet } from 'react-native';
+import { useState, useEffect } from 'react';
+import { supabase } from './utils/supabase-client';
 import Auth from './components/Auth';
+import Account from './components/Account';
+import { Session } from '@supabase/supabase-js';
+import { SafeAreaView, StyleSheet } from 'react-native';
 
 export function App() {
+  const [session, setSession] = useState<Session | null>(null);
+
+  useEffect(() => {
+    setSession(supabase.auth.session());
+
+    supabase.auth.onAuthStateChange((_event, supabaseSession) => {
+      setSession(supabaseSession);
+    });
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Auth />
+      {session && session.user ? (
+        <Account key={session.user.id} session={session} />
+      ) : (
+        <Auth />
+      )}
     </SafeAreaView>
   );
 }
