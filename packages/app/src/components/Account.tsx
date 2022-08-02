@@ -78,57 +78,77 @@ export default function Account({ session }: { session: Session }) {
   }
 
   return (
-    <View>
-      <View style={[styles.verticallySpaced, styles.mt20]}>
+    <View style={styles.container}>
+      <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
           value={session?.user?.email}
           editable={false}
+          style={styles.input}
         />
       </View>
-      <View style={styles.verticallySpaced}>
+      <View style={styles.inputContainer}>
         <TextInput
           placeholder="Username"
           value={username || ''}
           onChangeText={text => setUsername(text)}
+          style={styles.input}
         />
       </View>
-      <View style={styles.verticallySpaced}>
+
+      <View style={styles.inputContainer}>
         <TextInput
           placeholder="Website"
           value={website || ''}
           onChangeText={text => setWebsite(text)}
+          style={styles.input}
         />
       </View>
 
-      <View style={[styles.verticallySpaced, styles.mt20]}>
-        <TouchableOpacity
-          onPress={() => updateProfile()}
-          disabled={loading}>
-          <Text>{loading ? 'Loading ...' : 'Update'}</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={() => updateProfile()}
+        disabled={loading}
+        style={styles.button}>
+        <Text style={styles.buttonText}>
+          {loading ? 'Loading ...' : 'Update'}
+        </Text>
+      </TouchableOpacity>
 
-      <View style={styles.verticallySpaced}>
-        <TouchableOpacity onPress={() => supabase.auth.signOut()}>
-          <Text>Sign Out</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={() => supabase.auth.signOut()}
+        style={styles.button}>
+        <Text style={styles.buttonText}>Sign Out</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 40,
-    padding: 12
+    flex: 1,
+    alignItems: 'stretch',
+    justifyContent: 'center'
   },
-  verticallySpaced: {
-    paddingTop: 4,
-    paddingBottom: 4,
-    alignSelf: 'stretch'
+  inputContainer: {
+    marginHorizontal: 20
   },
-  mt20: {
-    marginTop: 20
+  input: {
+    borderColor: '#fff',
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 20,
+    color: '#fff',
+    fontSize: 20
+  },
+  button: {
+    marginHorizontal: 20,
+    backgroundColor: '#841584',
+    marginVertical: 10
+  },
+  buttonText: {
+    color: '#fff',
+    padding: 10,
+    fontSize: 20,
+    textAlign: 'center'
   }
 });
