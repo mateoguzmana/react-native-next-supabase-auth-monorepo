@@ -39,9 +39,6 @@ export default function Auth() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Authentication with Supabase</Text>
-      <Text style={styles.subtitle}>
-        Sign in via magic link with your email below
-      </Text>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -72,8 +69,6 @@ export default function Auth() {
           </Text>
         </TouchableOpacity>
       </View>
-
-      <View style={styles.hr} />
 
       <View style={styles.button}>
         <TouchableOpacity onPress={() => signUpWithEmail()} disabled={loading}>
@@ -119,18 +114,13 @@ const styles = StyleSheet.create({
   },
   button: {
     marginHorizontal: 20,
-    backgroundColor: '#841584'
+    backgroundColor: '#841584',
+    marginVertical: 10
   },
   buttonText: {
     color: '#fff',
     padding: 10,
     fontSize: 20,
     textAlign: 'center'
-  },
-  hr: {
-    borderBottomColor: '#ccc',
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    marginVertical: 10,
-    marginHorizontal: 20
   }
 });

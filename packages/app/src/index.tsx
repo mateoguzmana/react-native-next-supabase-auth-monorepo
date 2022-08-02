@@ -17,8 +17,6 @@ export function App() {
     });
   }, []);
 
-  console.log({ session })
-
   return (
     <SafeAreaView style={styles.container}>
       {session && session.user ? (

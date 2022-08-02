@@ -32,6 +32,7 @@ export default function Account({ session }: { session: Session }) {
         .select(`username, website, avatar_url`)
         .eq('id', user.id)
         .single();
+
       if (error && status !== 406) {
         throw error;
       }
