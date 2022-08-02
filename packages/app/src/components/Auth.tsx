@@ -1,6 +1,12 @@
-import React from 'react';
-import { useState } from 'react';
-import { Alert, Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import React, { useState } from 'react';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native';
 import { supabase } from '../utils/supabase-client';
 
 export default function Auth() {
@@ -29,20 +35,23 @@ export default function Auth() {
       <Text style={styles.subtitle}>
         Sign in via magic link with your email below
       </Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="email-address"
-        placeholder="Your email"
-        value={email}
-        onChange={e => setEmail(e.nativeEvent.text)}
-      />
-      <View style={styles.button}>
-        <Button
-          onPress={() => handleLogin(email)}
-          disabled={loading}
-          title={loading ? 'Loading' : 'Send magic link'}
-          color="#841584"
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          keyboardType="email-address"
+          placeholder="Your email"
+          placeholderTextColor={'#ccc'}
+          value={email}
+          autoCapitalize="none"
+          onChange={e => setEmail(e.nativeEvent.text)}
         />
+      </View>
+      <View style={styles.button}>
+        <TouchableOpacity onPress={() => handleLogin(email)} disabled={loading}>
+          <Text style={styles.buttonText}>
+            {loading ? 'Loading' : 'Send magic link'}
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -51,7 +60,7 @@ export default function Auth() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'stretch',
     justifyContent: 'center'
   },
   title: {
@@ -59,15 +68,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
     marginBottom: 20,
-    width: '70%',
     textAlign: 'center'
   },
   subtitle: {
     fontSize: 20,
     color: '#fff',
     marginBottom: 20,
-    width: '70%',
+    paddingHorizontal: 20,
     textAlign: 'center'
+  },
+  inputContainer: {
+    padding: 20
   },
   input: {
     borderColor: '#fff',
@@ -75,9 +86,16 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 20,
     color: '#fff',
-    width: '70%'
+    fontSize: 20
   },
   button: {
-    width: '70%'
+    marginHorizontal: 20,
+    backgroundColor: '#841584'
+  },
+  buttonText: {
+    color: '#fff',
+    padding: 10,
+    fontSize: 20,
+    textAlign: 'center'
   }
 });
