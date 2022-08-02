@@ -12,16 +12,10 @@ export function App() {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'black'
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '600',
-    color: 'white',
-    textAlign: 'center'
+    backgroundColor: '#121212'
   }
 });
 
