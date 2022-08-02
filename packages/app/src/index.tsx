@@ -1,4 +1,3 @@
-// import 'react-native-url-polyfill/auto';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { supabase } from './utils/supabase-client';
@@ -17,6 +16,8 @@ export function App() {
       setSession(supabaseSession);
     });
   }, []);
+
+  console.log({ session })
 
   return (
     <SafeAreaView style={styles.container}>
