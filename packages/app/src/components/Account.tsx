@@ -49,15 +49,7 @@ export default function Account({ session }: { session: Session }) {
     }
   }
 
-  async function updateProfile({
-    username,
-    website,
-    avatar_url
-  }: {
-    username: string;
-    website: string;
-    avatar_url: string;
-  }) {
+  async function updateProfile() {
     try {
       setLoading(true);
       const user = supabase.auth.user();
@@ -111,7 +103,7 @@ export default function Account({ session }: { session: Session }) {
 
       <View style={[styles.verticallySpaced, styles.mt20]}>
         <TouchableOpacity
-          onPress={() => updateProfile({ username, website, avatar_url })}
+          onPress={() => updateProfile()}
           disabled={loading}>
           <Text>{loading ? 'Loading ...' : 'Update'}</Text>
         </TouchableOpacity>
