@@ -10,24 +10,31 @@ import {
 import { supabase } from '../utils/supabase-client';
 
 export default function Auth() {
-  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (loginEmail: string) => {
-    try {
-      setLoading(true);
-      const { error } = await supabase.auth.signIn({
-        email: loginEmail
-      });
-      if (error) throw error;
-      Alert.alert('Check your email for the login link!');
-    } catch (error) {
-      console.log(error);
-      Alert.alert((error as any).error_description || (error as any).message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  async function signInWithEmail() {
+    setLoading(true);
+    const { user, error } = await supabase.auth.signIn({
+      email: email,
+      password: password
+    });
+
+    if (error) Alert.alert(error.message);
+    setLoading(false);
+  }
+
+  async function signUpWithEmail() {
+    setLoading(true);
+    const { user, error } = await supabase.auth.signUp({
+      email: email,
+      password: password
+    });
+
+    if (error) Alert.alert(error.message);
+    setLoading(false);
+  }
 
   return (
     <View style={styles.container}>
@@ -46,10 +53,32 @@ export default function Auth() {
           onChange={e => setEmail(e.nativeEvent.text)}
         />
       </View>
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={styles.input}
+          secureTextEntry
+          placeholder="Your password"
+          placeholderTextColor={'#ccc'}
+          value={password}
+          autoCapitalize="none"
+          textContentType="password"
+          onChange={e => setPassword(e.nativeEvent.text)}
+        />
+      </View>
       <View style={styles.button}>
-        <TouchableOpacity onPress={() => handleLogin(email)} disabled={loading}>
+        <TouchableOpacity onPress={() => signInWithEmail()} disabled={loading}>
           <Text style={styles.buttonText}>
-            {loading ? 'Loading' : 'Send magic link'}
+            {loading ? 'Loading' : 'Sign in with email'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.hr} />
+
+      <View style={styles.button}>
+        <TouchableOpacity onPress={() => signUpWithEmail()} disabled={loading}>
+          <Text style={styles.buttonText}>
+            {loading ? 'Loading' : 'Sign up'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -78,7 +107,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   inputContainer: {
-    padding: 20
+    marginHorizontal: 20
   },
   input: {
     borderColor: '#fff',
@@ -97,5 +126,11 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 20,
     textAlign: 'center'
+  },
+  hr: {
+    borderBottomColor: '#ccc',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    marginVertical: 10,
+    marginHorizontal: 20
   }
 });
