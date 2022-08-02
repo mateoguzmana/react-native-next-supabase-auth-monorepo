@@ -5,10 +5,7 @@ import Auth from './components/Auth';
 export function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <Auth
-        supabaseUrl=""
-        supabaseKey=""
-      />
+      <Auth />
     </SafeAreaView>
   );
 }

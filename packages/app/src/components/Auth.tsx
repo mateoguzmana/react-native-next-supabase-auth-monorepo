@@ -3,20 +3,14 @@ import { useState } from 'react';
 import { Alert, Button, Text, TextInput, View } from 'react-native';
 import { supabase } from '../utils/supabase-client';
 
-interface AuthProps {
-  supabaseUrl: string;
-  supabaseKey: string;
-}
-
-export default function Auth({ supabaseUrl, supabaseKey }: AuthProps) {
+export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
 
   const handleLogin = async (loginEmail: string) => {
-    console.log('here');
     try {
       setLoading(true);
-      const { error } = await supabase(supabaseUrl, supabaseKey).auth.signIn({
+      const { error } = await supabase.auth.signIn({
         email: loginEmail
       });
       if (error) throw error;
