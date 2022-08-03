@@ -6,7 +6,8 @@ import {
   View,
   Image,
   Pressable,
-  Platform
+  Platform,
+  ActivityIndicator
 } from 'react-native';
 import React from 'react';
 import { decode } from 'base64-arraybuffer';
@@ -33,7 +34,7 @@ export default function Avatar({ url, onUpload, imagePicker }: AvatarProps) {
       if (error) {
         throw error;
       }
-      const downloadedUrl = URL.createObjectURL(data);
+      const downloadedUrl = data && URL.createObjectURL(data);
       setAvatarUrl(downloadedUrl);
     } catch (error) {
       console.log('Error downloading image: ', error.message);
@@ -43,7 +44,10 @@ export default function Avatar({ url, onUpload, imagePicker }: AvatarProps) {
   async function uploadAvatar() {
     const image = await imagePicker();
 
-    const getFilename = Platform.OS !== 'web' ? image.assets[0].uri.split('/') : image.selected[0].uri;
+    const getFilename =
+      Platform.OS !== 'web'
+        ? image.assets[0].uri.split('/')
+        : image.selected[0].uri;
     const fileName = getFilename[getFilename.length - 1];
     const imageToUpload =
       Platform.OS !== 'web' ? image.assets[0].base64 : image.selected[0].base64;
@@ -73,7 +77,9 @@ export default function Avatar({ url, onUpload, imagePicker }: AvatarProps) {
 
   return (
     <View style={styles.container}>
-      {avatarUrl ? (
+      {uploading ? (
+        <ActivityIndicator style={styles.avatar} animating={uploading} />
+      ) : avatarUrl ? (
         <Pressable onPress={uploadAvatar}>
           <Image source={{ uri: avatarUrl }} style={styles.avatar} />
         </Pressable>
@@ -97,5 +103,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: 20
   },
-  avatar: { width: 150, height: 150, borderWidth: 4, borderColor: '#841584', borderRadius: 75 }
+  avatar: {
+    width: 150,
+    height: 150,
+    borderWidth: 4,
+    borderColor: '#841584',
+    borderRadius: 75
+  }
 });
