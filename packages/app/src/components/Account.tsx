@@ -92,7 +92,8 @@ export default function Account({ session, imagePicker }: AccountProps) {
 
   return (
     <View style={styles.container}>
-      <Avatar imagePicker={imagePicker} url={avatar_url} onUpload={onUpload} />
+      <Avatar imagePicker={imagePicker} url={avatar_url} onUpload={onUpload} loading={loading} />
+
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"

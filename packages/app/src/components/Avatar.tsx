@@ -16,9 +16,10 @@ interface AvatarProps {
   imagePicker: () => Promise<any>;
   url?: string;
   onUpload: (url: string) => void;
+  loading?: boolean;
 }
 
-export default function Avatar({ url, onUpload, imagePicker }: AvatarProps) {
+export default function Avatar({ url, onUpload, imagePicker, loading }: AvatarProps) {
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
@@ -52,8 +53,6 @@ export default function Avatar({ url, onUpload, imagePicker }: AvatarProps) {
     const imageToUpload =
       Platform.OS !== 'web' ? image.assets[0].base64 : image.selected[0].base64;
 
-    console.log({ imageToUpload });
-
     try {
       setUploading(true);
 
@@ -77,8 +76,8 @@ export default function Avatar({ url, onUpload, imagePicker }: AvatarProps) {
 
   return (
     <View style={styles.container}>
-      {uploading ? (
-        <ActivityIndicator style={styles.avatar} animating={uploading} />
+      {uploading || loading ? (
+        <ActivityIndicator style={styles.avatar} animating={uploading || loading} />
       ) : avatarUrl ? (
         <Pressable onPress={uploadAvatar}>
           <Image source={{ uri: avatarUrl }} style={styles.avatar} />
