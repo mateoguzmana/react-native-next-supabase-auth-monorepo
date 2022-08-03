@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabase-client';
-import { Alert, StyleSheet, View, Image, Pressable } from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  View,
+  Image,
+  Pressable,
+  Platform
+} from 'react-native';
 import React from 'react';
+import { decode } from 'base64-arraybuffer';
 
 interface AvatarProps {
   imagePicker: () => Promise<any>;
+  url?: string;
 }
 
 export default function Avatar({
@@ -35,37 +44,36 @@ export default function Avatar({
     }
   }
 
-  async function uploadAvatar(event) {
+  async function uploadAvatar() {
     const image = await imagePicker();
 
-    console.log({ image });
+    const filename = image.assets[0].uri ?? '';
+    const imageToUpload =
+      Platform.OS !== 'android' ? image.assets[0].base64 : '';
 
-    // try {
-    //   setUploading(true);
+    console.log({ imageToUpload });
 
-    //   if (!event.target.files || event.target.files.length === 0) {
-    //     throw new Error('You must select an image to upload.');
-    //   }
+    try {
+      setUploading(true);
 
-    //   const file = event.target.files[0];
-    //   const fileExt = file.name.split('.').pop();
-    //   const fileName = `${Math.random()}.${fileExt}`;
-    //   const filePath = `${fileName}`;
+      const { data, error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload('melo222.png', decode(imageToUpload), {
+          contentType: 'image/jpg'
+        });
 
-    //   let { error: uploadError } = await supabase.storage
-    //     .from('avatars')
-    //     .upload(filePath, file);
+      console.log({ data });
 
-    //   if (uploadError) {
-    //     throw uploadError;
-    //   }
+      if (uploadError) {
+        throw uploadError;
+      }
 
-    //   onUpload(filePath);
-    // } catch (error: any) {
-    //   Alert.alert(error.message);
-    // } finally {
-    //   setUploading(false);
-    // }
+      // onUpload(filePath);
+    } catch (error: any) {
+      Alert.alert(error.message);
+    } finally {
+      setUploading(false);
+    }
   }
 
   return (

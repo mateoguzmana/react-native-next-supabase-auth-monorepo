@@ -13,6 +13,7 @@
     "typescript": "4.7.4"
   },
   "dependencies": {
-    "@supabase/supabase-js": "1.35.4"
+    "@supabase/supabase-js": "1.35.4",
+    "base64-arraybuffer": "1.0.2"
   }
 }

@@ -43,6 +43,8 @@ export default function Account({ session, imagePicker }: AccountProps) {
         throw error;
       }
 
+      console.log({ data })
+
       if (data) {
         setUsername(data.username);
         setWebsite(data.website);
@@ -83,9 +85,11 @@ export default function Account({ session, imagePicker }: AccountProps) {
     }
   }
 
+  console.log({ avatar_url })
+
   return (
     <View style={styles.container}>
-      <Avatar imagePicker={imagePicker} />
+      <Avatar imagePicker={imagePicker} url={avatar_url} />
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
