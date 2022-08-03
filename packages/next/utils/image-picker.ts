@@ -1,11 +1,10 @@
-// @TODO check on the expo implementation for this https://github.com/expo/expo/blob/master/packages/expo-image-picker/src/ExponentImagePicker.web.ts
-
+// Got some inspiration from https://github.com/expo/expo/blob/master/packages/expo-image-picker/src/ExponentImagePicker.web.ts
 export const imagePicker = async () => {
   const result = await openFileBrowserAsync({
     mediaTypes: 'jpg',
     allowsMultipleSelection: true,
     capture: true,
-    base64: true,
+    base64: true
   });
 
   return result;
@@ -17,7 +16,7 @@ function openFileBrowserAsync({
   allowsMultipleSelection = false,
   base64
 }) {
-  const mediaTypeFormat = 'jpg';
+  const mediaTypeFormat = mediaTypes;
 
   const input = document.createElement('input');
   input.style.display = 'none';
