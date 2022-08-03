@@ -43,8 +43,6 @@ export default function Account({ session, imagePicker }: AccountProps) {
         throw error;
       }
 
-      console.log({ data })
-
       if (data) {
         setUsername(data.username);
         setWebsite(data.website);
@@ -57,17 +55,19 @@ export default function Account({ session, imagePicker }: AccountProps) {
     }
   }
 
-  async function updateProfile() {
+  async function updateProfile(newAvatarUrl) {
     try {
       setLoading(true);
+
       const user = supabase.auth.user();
+
       if (!user) throw new Error('No user on the session!');
 
       const updates = {
         id: user.id,
         username,
         website,
-        avatar_url,
+        avatar_url: newAvatarUrl ?? avatar_url,
         updated_at: new Date()
       };
 
@@ -85,11 +85,14 @@ export default function Account({ session, imagePicker }: AccountProps) {
     }
   }
 
-  console.log({ avatar_url })
+  function onUpload(url: string) {
+    setAvatarUrl(url);
+    updateProfile(url);
+  }
 
   return (
     <View style={styles.container}>
-      <Avatar imagePicker={imagePicker} url={avatar_url} />
+      <Avatar imagePicker={imagePicker} url={avatar_url} onUpload={onUpload} />
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"
