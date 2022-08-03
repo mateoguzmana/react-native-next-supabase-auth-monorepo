@@ -55,7 +55,7 @@ export default function Account({ session, imagePicker }: AccountProps) {
     }
   }
 
-  async function updateProfile(newAvatarUrl) {
+  async function updateProfile(newAvatarUrl?: string) {
     try {
       setLoading(true);
 
