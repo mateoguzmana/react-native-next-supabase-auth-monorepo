@@ -1,0 +1,1 @@
+// @TODO check on the expo implementation for this https://github.com/expo/expo/blob/master/packages/expo-image-picker/src/ExponentImagePicker.web.ts

@@ -1,0 +1,16 @@
+{
+  "extends": "../../.tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "module": "esnext",
+    "incremental": true
+  },
+  "include": [
+    "next-env.d.ts",
+    "public",
+    "pages"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

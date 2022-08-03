@@ -10,8 +10,14 @@ import {
   TouchableOpacity
 } from 'react-native';
 import { ApiError, Session } from '@supabase/supabase-js';
+import Avatar from './Avatar';
 
-export default function Account({ session }: { session: Session }) {
+interface AccountProps {
+  imagePicker: () => Promise<any>;
+  session: Session;
+}
+
+export default function Account({ session, imagePicker }: AccountProps) {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState('');
   const [website, setWebsite] = useState('');
@@ -79,6 +85,7 @@ export default function Account({ session }: { session: Session }) {
 
   return (
     <View style={styles.container}>
+      <Avatar imagePicker={imagePicker} />
       <View style={styles.inputContainer}>
         <TextInput
           placeholder="Email"

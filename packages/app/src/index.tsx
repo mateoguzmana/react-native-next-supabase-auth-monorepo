@@ -6,7 +6,11 @@ import Account from './components/Account';
 import { Session } from '@supabase/supabase-js';
 import { SafeAreaView, StyleSheet } from 'react-native';
 
-export function App() {
+interface AppProps {
+  imagePicker: () => Promise<any>;
+}
+
+export function App({ imagePicker }: AppProps) {
   const [session, setSession] = useState<Session | null>(null);
 
   useEffect(() => {
@@ -20,7 +24,7 @@ export function App() {
   return (
     <SafeAreaView style={styles.container}>
       {session && session.user ? (
-        <Account key={session.user.id} session={session} />
+        <Account key={session.user.id} session={session} imagePicker={imagePicker} />
       ) : (
         <Auth />
       )}
