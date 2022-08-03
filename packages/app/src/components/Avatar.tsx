@@ -43,10 +43,10 @@ export default function Avatar({ url, onUpload, imagePicker }: AvatarProps) {
   async function uploadAvatar() {
     const image = await imagePicker();
 
-    var getFilename = image.assets[0].uri.split('/');
+    const getFilename = Platform.OS !== 'web' ? image.assets[0].uri.split('/') : image.selected[0].uri;
     const fileName = getFilename[getFilename.length - 1];
     const imageToUpload =
-      Platform.OS !== 'android' ? image.assets[0].base64 : '';
+      Platform.OS !== 'web' ? image.assets[0].base64 : image.selected[0].base64;
 
     console.log({ imageToUpload });
 
