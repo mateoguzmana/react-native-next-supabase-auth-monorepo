@@ -7,7 +7,8 @@ import {
   Alert,
   TextInput,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Platform
 } from 'react-native';
 import { ApiError, Session } from '@supabase/supabase-js';
 import Avatar from './Avatar';
@@ -92,7 +93,12 @@ export default function Account({ session, imagePicker }: AccountProps) {
 
   return (
     <View style={styles.container}>
-      <Avatar imagePicker={imagePicker} url={avatar_url} onUpload={onUpload} loading={loading} />
+      <Avatar
+        imagePicker={imagePicker}
+        url={avatar_url}
+        onUpload={onUpload}
+        loading={loading}
+      />
 
       <View style={styles.inputContainer}>
         <TextInput
@@ -142,7 +148,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    minWidth: Platform.OS === 'web' ? '30%' : undefined
   },
   inputContainer: {
     marginHorizontal: 20
