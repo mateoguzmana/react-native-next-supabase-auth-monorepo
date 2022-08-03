@@ -3,5 +3,8 @@
 import 'setimmediate';
 
 import { App } from '@react-native-next-monorepo/app';
+import { imagePicker } from '../utils/image-picker';
 
-export default App;
+const AppWrapper = () => <App imagePicker={imagePicker} />;
+
+export default AppWrapper;
