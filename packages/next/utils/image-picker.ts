@@ -61,6 +61,8 @@ export declare type AndroidVideoOptions = 'low' | 'high';
 export declare type iOSVideoOptions = 'low' | 'medium' | 'high';
 export declare type ErrorCode = 'camera_unavailable' | 'permission' | 'others';
 
+// @TODO: Image types are not working and also check video
+
 const DEFAULT_OPTIONS: ImageLibraryOptions & CameraOptions = {
   mediaType: 'photo',
   videoQuality: 'high',
@@ -87,20 +89,21 @@ export const imagePicker = async () => {
 };
 
 export function launchCamera(
-  _: ImageLibraryOptions,
-  callback: Callback
+  options: ImageLibraryOptions = DEFAULT_OPTIONS,
+  callback?: Callback
 ): Promise<ImagePickerResponse> {
   return new Promise(resolve => {
     const result = {
       errorCode: 'camera_unavailable' as ErrorCode,
-      errorMessage: 'launchCamera is not supported for web'
+      errorMessage: 'launchCamera is not supported for web yet'
     };
 
     if (callback) callback(result);
+
     resolve(result);
   });
 
-  // @TODO: Test if this works after working on the launchImageLibrary first
+  // @TODO: Might work but needs to be tested
   // const input = document.createElement('input');
   // input.style.display = 'none';
   // input.setAttribute('type', 'file');
@@ -109,10 +112,47 @@ export function launchCamera(
   // if (options.selectionLimit > 1) {
   //   input.setAttribute('multiple', 'multiple');
   // }
-  // if (capture) {
-  //   input.setAttribute('capture', 'camera');
-  // }
+
+  // input.setAttribute('capture', 'camera');
+
   // document.body.appendChild(input);
+
+  // return new Promise(resolve => {
+  //   input.addEventListener('change', async () => {
+  //     if (input.files) {
+  //       if (options.selectionLimit <= 1) {
+  //         const img = await readFileForRNWeb(input.files[0], {
+  //           includeBase64: options.includeBase64
+  //         });
+
+  //         const result = { assets: [img] };
+
+  //         if (callback) callback(result);
+
+  //         resolve(result);
+  //       } else {
+  //         const imgs = await Promise.all(
+  //           Array.from(input.files).map(file =>
+  //             readFileForRNWeb(file, { includeBase64: options.includeBase64 })
+  //           )
+  //         );
+
+  //         const result = {
+  //           didCancel: false,
+  //           assets: imgs
+  //         };
+
+  //         if (callback) callback(result);
+
+  //         resolve(result);
+  //       }
+  //     }
+  //     document.body.removeChild(input);
+  //   });
+
+  //   const event = new MouseEvent('click');
+  //   input.dispatchEvent(event);
+  // });
 }
 
 export function launchImageLibrary(
@@ -139,7 +179,7 @@ export function launchImageLibrary(
             includeBase64: options.includeBase64
           });
 
-          const result = { assets: [img] }
+          const result = { assets: [img] };
 
           if (callback) callback(result);
 
