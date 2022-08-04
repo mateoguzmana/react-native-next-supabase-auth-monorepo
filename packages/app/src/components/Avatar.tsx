@@ -12,8 +12,29 @@ import {
 import React from 'react';
 import { decode } from 'base64-arraybuffer';
 
+export declare type ErrorCode = 'camera_unavailable' | 'permission' | 'others';
+export interface Asset {
+  base64?: string;
+  uri?: string;
+  width?: number;
+  height?: number;
+  fileSize?: number;
+  type?: string;
+  fileName?: string;
+  duration?: number;
+  bitrate?: number;
+  timestamp?: string;
+  id?: string;
+}
+export interface ImagePickerResponse {
+  didCancel?: boolean;
+  errorCode?: ErrorCode;
+  errorMessage?: string;
+  assets?: Asset[];
+}
+
 interface AvatarProps {
-  imagePicker: () => Promise<any>;
+  imagePicker: () => Promise<ImagePickerResponse>;
   url?: string;
   onUpload: (url: string) => void;
   loading?: boolean;
@@ -25,7 +46,7 @@ export default function Avatar({
   imagePicker,
   loading
 }: AvatarProps) {
-  const [avatarUrl, setAvatarUrl] = useState<ArrayBuffer | string | null>(null);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -48,7 +69,7 @@ export default function Avatar({
         fileReaderInstance.onload = () => {
           const base64data = fileReaderInstance.result;
 
-          base64data && setAvatarUrl(base64data);
+          base64data && setAvatarUrl(base64data as string);
         };
       }
     } catch (error) {
@@ -57,34 +78,32 @@ export default function Avatar({
   }
 
   async function uploadAvatar() {
-    const image = await imagePicker();
+    const images = await imagePicker();
 
-    const getFilename =
-      Platform.OS !== 'web'
-        ? image.assets[0].uri.split('/')
-        : image.selected[0].uri;
-    const fileName = getFilename[getFilename.length - 1];
-    const imageToUpload =
-      Platform.OS !== 'web' ? image.assets[0].base64 : image.selected[0].base64;
+    if (images && images.assets) {
+      const getFilename = images.assets[0].uri.split('/');
+      const fileName = getFilename[getFilename.length - 1];
+      const imageToUpload = images.assets[0].base64;
 
-    try {
-      setUploading(true);
+      try {
+        setUploading(true);
 
-      const { data, error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(fileName, decode(imageToUpload), {
-          contentType: 'image/jpg'
-        });
+        const { data, error: uploadError } = await supabase.storage
+          .from('avatars')
+          .upload(fileName, decode(imageToUpload), {
+            contentType: 'image/jpg'
+          });
 
-      if (uploadError) {
-        throw uploadError;
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        onUpload(fileName);
+      } catch (error: any) {
+        Alert.alert(error.message);
+      } finally {
+        setUploading(false);
       }
-
-      onUpload(fileName);
-    } catch (error: any) {
-      Alert.alert(error.message);
-    } finally {
-      setUploading(false);
     }
   }
 
