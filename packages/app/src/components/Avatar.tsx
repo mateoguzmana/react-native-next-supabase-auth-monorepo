@@ -6,7 +6,6 @@ import {
   View,
   Image,
   Pressable,
-  Platform,
   ActivityIndicator
 } from 'react-native';
 import React from 'react';
@@ -81,24 +80,26 @@ export default function Avatar({
     const images = await imagePicker();
 
     if (images && images.assets) {
-      const getFilename = images.assets[0].uri.split('/');
+      const getFilename = images.assets[0].uri?.split('/') ?? '';
       const fileName = getFilename[getFilename.length - 1];
       const imageToUpload = images.assets[0].base64;
 
       try {
         setUploading(true);
 
-        const { data, error: uploadError } = await supabase.storage
-          .from('avatars')
-          .upload(fileName, decode(imageToUpload), {
-            contentType: 'image/jpg'
-          });
+        if (imageToUpload) {
+          const { data, error: uploadError } = await supabase.storage
+            .from('avatars')
+            .upload(fileName, decode(imageToUpload), {
+              contentType: 'image/jpg'
+            });
 
-        if (uploadError) {
-          throw uploadError;
+          if (uploadError) {
+            throw uploadError;
+          }
+
+          onUpload(fileName);
         }
-
-        onUpload(fileName);
       } catch (error: any) {
         Alert.alert(error.message);
       } finally {
