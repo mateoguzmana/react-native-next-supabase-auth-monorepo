@@ -19,8 +19,13 @@ interface AvatarProps {
   loading?: boolean;
 }
 
-export default function Avatar({ url, onUpload, imagePicker, loading }: AvatarProps) {
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+export default function Avatar({
+  url,
+  onUpload,
+  imagePicker,
+  loading
+}: AvatarProps) {
+  const [avatarUrl, setAvatarUrl] = useState<ArrayBuffer | string | null>(null);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
@@ -32,11 +37,20 @@ export default function Avatar({ url, onUpload, imagePicker, loading }: AvatarPr
       const { data, error } = await supabase.storage
         .from('avatars')
         .download(path);
+
       if (error) {
         throw error;
       }
-      const downloadedUrl = data && URL.createObjectURL(data);
-      setAvatarUrl(downloadedUrl);
+
+      if (data) {
+        const fileReaderInstance = new FileReader();
+        fileReaderInstance.readAsDataURL(data);
+        fileReaderInstance.onload = () => {
+          const base64data = fileReaderInstance.result;
+
+          base64data && setAvatarUrl(base64data);
+        };
+      }
     } catch (error) {
       console.log('Error downloading image: ', error.message);
     }
@@ -77,7 +91,10 @@ export default function Avatar({ url, onUpload, imagePicker, loading }: AvatarPr
   return (
     <View style={styles.container}>
       {uploading || loading ? (
-        <ActivityIndicator style={styles.avatar} animating={uploading || loading} />
+        <ActivityIndicator
+          style={styles.avatar}
+          animating={uploading || loading}
+        />
       ) : avatarUrl ? (
         <Pressable onPress={uploadAvatar}>
           <Image source={{ uri: avatarUrl }} style={styles.avatar} />
