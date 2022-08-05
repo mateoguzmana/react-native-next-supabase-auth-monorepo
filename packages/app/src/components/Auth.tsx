@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Alert,
   StyleSheet,
   Text,
   TextInput,
@@ -8,6 +7,7 @@ import {
   View
 } from 'react-native';
 import { supabase } from '../utils/supabase-client';
+import Alert from './Alert';
 
 export default function Auth() {
   const [email, setEmail] = useState('');
@@ -21,7 +21,7 @@ export default function Auth() {
       password: password
     });
 
-    if (error) Alert.alert(error.message);
+    if (error) Alert(error.message);
     setLoading(false);
   }
 
@@ -32,7 +32,7 @@ export default function Auth() {
       password: password
     });
 
-    if (error) Alert.alert(error.message);
+    if (error) Alert(error.message);
     setLoading(false);
   }
 

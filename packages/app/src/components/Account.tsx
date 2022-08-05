@@ -4,7 +4,6 @@ import { supabase } from '../utils/supabase-client';
 import {
   StyleSheet,
   View,
-  Alert,
   TextInput,
   Text,
   TouchableOpacity,
@@ -12,6 +11,7 @@ import {
 } from 'react-native';
 import { ApiError, Session } from '@supabase/supabase-js';
 import Avatar from './Avatar';
+import Alert from './Alert';
 
 interface AccountProps {
   imagePicker: () => Promise<any>;
@@ -50,7 +50,7 @@ export default function Account({ session, imagePicker }: AccountProps) {
         setAvatarUrl(data.avatar_url);
       }
     } catch (error) {
-      Alert.alert((error as ApiError).message);
+      Alert((error as ApiError).message);
     } finally {
       setLoading(false);
     }
@@ -80,7 +80,7 @@ export default function Account({ session, imagePicker }: AccountProps) {
         throw error;
       }
     } catch (error) {
-      Alert.alert((error as ApiError).message);
+      Alert((error as ApiError).message);
     } finally {
       setLoading(false);
     }

@@ -2,7 +2,7 @@
 
 ![Repository Banner](https://i.imgur.com/wPdflX8.png[/img])
 
-Authentication starter kit for React Native and Next.js in a monorepo.
+Authentication starter kit for React Native and Next.js in a monorepo using React Native Web to share components across the projects.
 
 ## Project set up
 

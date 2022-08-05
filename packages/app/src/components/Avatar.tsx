@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../utils/supabase-client';
 import {
-  Alert,
   StyleSheet,
   View,
   Image,
@@ -10,27 +9,9 @@ import {
 } from 'react-native';
 import React from 'react';
 import { decode } from 'base64-arraybuffer';
-
-export declare type ErrorCode = 'camera_unavailable' | 'permission' | 'others';
-export interface Asset {
-  base64?: string;
-  uri?: string;
-  width?: number;
-  height?: number;
-  fileSize?: number;
-  type?: string;
-  fileName?: string;
-  duration?: number;
-  bitrate?: number;
-  timestamp?: string;
-  id?: string;
-}
-export interface ImagePickerResponse {
-  didCancel?: boolean;
-  errorCode?: ErrorCode;
-  errorMessage?: string;
-  assets?: Asset[];
-}
+import { ImagePickerResponse } from '../types';
+import { ApiError } from '@supabase/supabase-js';
+import Alert from './Alert';
 
 interface AvatarProps {
   imagePicker: () => Promise<ImagePickerResponse>;
@@ -72,7 +53,7 @@ export default function Avatar({
         };
       }
     } catch (error) {
-      console.log('Error downloading image: ', error.message);
+      Alert(`Error downloading image: ${(error as ApiError).message}`);
     }
   }
 
@@ -101,7 +82,7 @@ export default function Avatar({
           onUpload(fileName);
         }
       } catch (error: any) {
-        Alert.alert(error.message);
+        Alert(error.message);
       } finally {
         setUploading(false);
       }
