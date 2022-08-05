@@ -1,159 +1,40 @@
+// I created this image picker functions here to be able to get images from the browser.
 // Got some inspiration from https://github.com/expo/expo/blob/master/packages/expo-image-picker/src/ExponentImagePicker.web.ts
-export declare type Callback = (response: ImagePickerResponse) => any;
-export interface ImageLibraryOptions {
+// But I have created a PR to add it to the react-native-image-picker package so bare with me!
+// https://github.com/react-native-image-picker/react-native-image-picker/pull/2014
+type Callback = (response: ImagePickerResponse) => any;
+
+interface ImageLibraryOptions {
   selectionLimit?: number;
   mediaType: MediaType;
-  maxWidth?: number;
-  maxHeight?: number;
-  quality?: PhotoQuality;
-  videoQuality?: AndroidVideoOptions | iOSVideoOptions;
   includeBase64?: boolean;
-  includeExtra?: boolean;
-  presentationStyle?:
-    | 'currentContext'
-    | 'fullScreen'
-    | 'pageSheet'
-    | 'formSheet'
-    | 'popover'
-    | 'overFullScreen'
-    | 'overCurrentContext';
 }
-export interface CameraOptions
-  extends Omit<ImageLibraryOptions, 'selectionLimit'> {
-  durationLimit?: number;
-  saveToPhotos?: boolean;
-  cameraType?: CameraType;
-}
-export interface Asset {
+
+interface Asset {
   base64?: string;
   uri?: string;
   width?: number;
   height?: number;
-  fileSize?: number;
-  type?: string;
-  fileName?: string;
-  duration?: number;
-  bitrate?: number;
-  timestamp?: string;
-  id?: string;
 }
-export interface ImagePickerResponse {
+
+interface ImagePickerResponse {
   didCancel?: boolean;
-  errorCode?: ErrorCode;
-  errorMessage?: string;
   assets?: Asset[];
 }
-export declare type PhotoQuality =
-  | 0
-  | 0.1
-  | 0.2
-  | 0.3
-  | 0.4
-  | 0.5
-  | 0.6
-  | 0.7
-  | 0.8
-  | 0.9
-  | 1;
-export declare type CameraType = 'back' | 'front';
-export declare type MediaType = 'photo' | 'video' | 'mixed';
-export declare type AndroidVideoOptions = 'low' | 'high';
-export declare type iOSVideoOptions = 'low' | 'medium' | 'high';
-export declare type ErrorCode = 'camera_unavailable' | 'permission' | 'others';
 
-// @TODO: Image types are not working and also check video
+type MediaType = 'image/*';
 
-const DEFAULT_OPTIONS: ImageLibraryOptions & CameraOptions = {
-  mediaType: 'photo',
-  videoQuality: 'high',
-  quality: 1,
-  maxWidth: 0,
-  maxHeight: 0,
-  includeBase64: false,
-  cameraType: 'back',
-  selectionLimit: 1,
-  saveToPhotos: false,
-  durationLimit: 0,
-  includeExtra: false,
-  presentationStyle: 'pageSheet'
+const DEFAULT_OPTIONS: ImageLibraryOptions = {
+  mediaType: 'image/*',
+  includeBase64: true,
+  selectionLimit: 1
 };
 
 export const imagePicker = async () => {
-  const result = await launchImageLibrary({
-    selectionLimit: 1,
-    mediaType: 'photo',
-    includeBase64: true
-  });
+  const result = await launchImageLibrary();
 
   return result;
 };
-
-export function launchCamera(
-  options: ImageLibraryOptions = DEFAULT_OPTIONS,
-  callback?: Callback
-): Promise<ImagePickerResponse> {
-  return new Promise(resolve => {
-    const result = {
-      errorCode: 'camera_unavailable' as ErrorCode,
-      errorMessage: 'launchCamera is not supported for web yet'
-    };
-
-    if (callback) callback(result);
-
-    resolve(result);
-  });
-
-  // @TODO: Might work but needs to be tested
-  // const input = document.createElement('input');
-  // input.style.display = 'none';
-  // input.setAttribute('type', 'file');
-  // input.setAttribute('accept', options.mediaType);
-  // input.setAttribute('id', 'whateverid');
-  // if (options.selectionLimit > 1) {
-  //   input.setAttribute('multiple', 'multiple');
-  // }
-
-  // input.setAttribute('capture', 'camera');
-
-  // document.body.appendChild(input);
-
-  // return new Promise(resolve => {
-  //   input.addEventListener('change', async () => {
-  //     if (input.files) {
-  //       if (options.selectionLimit <= 1) {
-  //         const img = await readFileForRNWeb(input.files[0], {
-  //           includeBase64: options.includeBase64
-  //         });
-
-  //         const result = { assets: [img] };
-
-  //         if (callback) callback(result);
-
-  //         resolve(result);
-  //       } else {
-  //         const imgs = await Promise.all(
-  //           Array.from(input.files).map(file =>
-  //             readFileForRNWeb(file, { includeBase64: options.includeBase64 })
-  //           )
-  //         );
-
-  //         const result = {
-  //           didCancel: false,
-  //           assets: imgs
-  //         };
-
-  //         if (callback) callback(result);
-
-  //         resolve(result);
-  //       }
-  //     }
-  //     document.body.removeChild(input);
-  //   });
-
-  //   const event = new MouseEvent('click');
-  //   input.dispatchEvent(event);
-  // });
-}
 
 export function launchImageLibrary(
   options: ImageLibraryOptions = DEFAULT_OPTIONS,
@@ -175,7 +56,7 @@ export function launchImageLibrary(
     input.addEventListener('change', async () => {
       if (input.files) {
         if (options.selectionLimit <= 1) {
-          const img = await readFileForRNWeb(input.files[0], {
+          const img = await readFile(input.files[0], {
             includeBase64: options.includeBase64
           });
 
@@ -187,7 +68,7 @@ export function launchImageLibrary(
         } else {
           const imgs = await Promise.all(
             Array.from(input.files).map(file =>
-              readFileForRNWeb(file, { includeBase64: options.includeBase64 })
+              readFile(file, { includeBase64: options.includeBase64 })
             )
           );
 
@@ -209,7 +90,7 @@ export function launchImageLibrary(
   });
 }
 
-function readFileForRNWeb(
+function readFile(
   targetFile: Blob,
   options: Partial<ImageLibraryOptions>
 ): Promise<Asset> {
