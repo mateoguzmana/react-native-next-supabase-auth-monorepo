@@ -1,4 +1,12 @@
-# react-native-next-monorepo
+# react-native-next-supabase-auth-monorepo
+
+<p align="center">
+  <img src="https://img.shields.io/badge/-React Native-gray" />
+  <img src="https://img.shields.io/badge/-Next.js-green" />
+  <img src="https://img.shields.io/badge/-Monorepo-blue" />
+  <img src="https://img.shields.io/badge/-React Native Web-red" />
+   <img src="https://img.shields.io/badge/-Supabase-darkgreen" />
+</p>
 
 https://user-images.githubusercontent.com/20783123/183242429-c8229e10-5e64-4271-94d3-55e2f203412f.mov
 
