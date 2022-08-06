@@ -1,4 +1,4 @@
-# react-native-next-supabase-auth-monorepo
+<h2 align="center">React Native + Next.js Monorepo | Authentication with Supabase</h2>
 
 <p align="center">
   <img src="https://img.shields.io/badge/-React Native-gray" />
