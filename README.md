@@ -3,6 +3,11 @@
 https://user-images.githubusercontent.com/20783123/183242429-c8229e10-5e64-4271-94d3-55e2f203412f.mov
 
 Authentication starter kit for React Native and Next.js in a monorepo using Supabase for the DB and React Native Web to share components across the projects.
+
+## Getting started
+
+Fork or clone this repo and then follow the steps below.
+
 ## Project set up
 
 Note: Some steps were taken from https://supabase.com/docs/guides/with-nextjs
@@ -91,7 +96,7 @@ I am working on a way to unify this environment variable setup, bare with me :)
 
 ## Building the project
 
-Fork or clone this repo and then install the dependencies:
+Install the dependencies:
 
 ```bash
 yarn install
