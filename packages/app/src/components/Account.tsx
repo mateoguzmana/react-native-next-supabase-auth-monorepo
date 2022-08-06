@@ -56,7 +56,7 @@ export default function Account({ session, imagePicker }: AccountProps) {
     }
   }
 
-  async function updateProfile(newAvatarUrl?: string) {
+  async function updateProfile() {
     try {
       setLoading(true);
 
@@ -68,6 +68,33 @@ export default function Account({ session, imagePicker }: AccountProps) {
         id: user.id,
         username,
         website,
+        updated_at: new Date()
+      };
+
+      let { error } = await supabase
+        .from('profiles')
+        .upsert(updates, { returning: 'minimal' });
+
+      if (error) {
+        throw error;
+      }
+    } catch (error) {
+      Alert((error as ApiError).message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function updateAvatar(newAvatarUrl?: string) {
+    try {
+      setLoading(true);
+
+      const user = supabase.auth.user();
+
+      if (!user) throw new Error('No user on the session!');
+
+      const updates = {
+        id: user.id,
         avatar_url: newAvatarUrl ?? avatar_url,
         updated_at: new Date()
       };
@@ -88,7 +115,7 @@ export default function Account({ session, imagePicker }: AccountProps) {
 
   function onUpload(url: string) {
     setAvatarUrl(url);
-    updateProfile(url);
+    updateAvatar(url);
   }
 
   return (
@@ -106,6 +133,7 @@ export default function Account({ session, imagePicker }: AccountProps) {
           value={session?.user?.email}
           editable={false}
           style={styles.input}
+          placeholderTextColor="#aaa"
         />
       </View>
       <View style={styles.inputContainer}>
@@ -114,6 +142,7 @@ export default function Account({ session, imagePicker }: AccountProps) {
           value={username || ''}
           onChangeText={text => setUsername(text)}
           style={styles.input}
+          placeholderTextColor="#aaa"
         />
       </View>
 
@@ -123,6 +152,7 @@ export default function Account({ session, imagePicker }: AccountProps) {
           value={website || ''}
           onChangeText={text => setWebsite(text)}
           style={styles.input}
+          placeholderTextColor="#aaa"
         />
       </View>
 
